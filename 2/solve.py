@@ -12,6 +12,7 @@ green = 13
 blue = 14
 
 sumID = 0
+sumMinimum = 0
 
 for i in range(len(lines)):
 	next = False
@@ -20,16 +21,25 @@ for i in range(len(lines)):
 	game, data = line.split(":")
 	gameID = int(game.lower().split("game ")[1])
 	hands = data.split(";")
+	maxGreen = 1
+	maxRed = 1
+	maxBlue = 1
 	for hand in hands:
 		cubes = hand.split(",")
+		gameDictionary = resetDictionary()
 		for cube in cubes:
 			amount, color = cube.split()
 			gameDictionary[color] = int(amount)
-		if gameDictionary["red"] > red or gameDictionary["green"] > green or gameDictionary["blue"] > blue:
-			next = True
-			break
-	if next:
-		next = False
-		continue
-	sumID += gameID
+		if gameDictionary["red"] > maxRed:
+			maxRed = gameDictionary["red"]
+		if gameDictionary["green"] > maxGreen:
+			maxGreen = gameDictionary["green"]
+		if gameDictionary["blue"] > maxBlue:
+			maxBlue = gameDictionary["blue"]
+
+	if maxRed <= red and maxGreen <= green and maxBlue <= blue:
+		sumID += gameID
+	product = maxRed * maxGreen * maxBlue
+	sumMinimum += product
 print("Sum of ID", sumID)
+print("Sum of minimum", sumMinimum)
